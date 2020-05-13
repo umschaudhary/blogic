@@ -1,0 +1,1 @@
+Django BACKEND FOR BLOGIC
