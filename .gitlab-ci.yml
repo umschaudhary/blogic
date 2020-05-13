@@ -8,7 +8,7 @@ test:
   script:
       - python -V
       - export DATABASE_URL=postgres://postgres:@postgres:5432/python-test-app
-      - pip install -r requirements/dev.txt
+      - pip install -r requirements/base.txt
       - cp config/settings/test.sample.py config/settings/env.py
       - mkdir -p /builds/root/media
       - coverage run --source '.' --omit 'apps/*/migrations/*' manage.py test
