@@ -1,0 +1,20 @@
+image: python:3.8.1
+
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+      - python -V
+      - export DATABASE_URL=postgres://postgres:@postgres:5432/python-test-app
+      - pip install -r requirements/dev.txt
+      - cp config/settings/test.sample.py config/settings/env.py
+      - mkdir -p /builds/root/media
+      - coverage run --source '.' --omit 'apps/*/migrations/*' manage.py test
+      - coverage report
+  # This regex will pull out the line coverage from the coverage report output
+  # so it will be displayed in the job page on Gitlab.
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'
+
+
