@@ -1,0 +1,10 @@
+*.pyc
+tags
+.venv/
+.vscode/
+.idea
+*.vim
+env.py
+jpvenv
+*.ipynb*
+.coverage
