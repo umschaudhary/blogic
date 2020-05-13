@@ -5,15 +5,16 @@ stages:
 
 test:
   stage: test
-  script: 
-  - export DATABASE_URL=postgres://postgres:@postgres:5432/python-test-app
-  - python -V
-  - pip install -r requirements/dev.txt
-  # - cp config/settings/test.sample.py config/settings/env.py
-  - mkdir -p /builds/root/media
-  - python manage.py generate_rsa_keys
-  - coverage run --source '.' --omit 'apps/*/migrations/*' manage.py test
-  - coverage report
-# This regex will pull out the line coverage from the coverage report output
-# so it will be displayed in the job page on Gitlab.
-coverage: '/^TOTAL.*\s+(\d+\%)$/'
+  script:
+      - python -V
+      - export DATABASE_URL=postgres://postgres:@postgres:5432/python-test-app
+      - pip install -r requirements/dev.txt
+      - mkdir -p /builds/root/media
+      - python manage.py generate_rsa_keys
+      - coverage run --source '.' --omit 'apps/*/migrations/*' manage.py test
+      - coverage report
+  # This regex will pull out the line coverage from the coverage report output
+  # so it will be displayed in the job page on Gitlab.
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'
+
+
