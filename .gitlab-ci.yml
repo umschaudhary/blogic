@@ -2,6 +2,7 @@ image: python:3.8.1
 
 stages:
   - test
+  - deploy
 
 test:
   stage: test
@@ -16,3 +17,20 @@ test:
   # This regex will pull out the line coverage from the coverage report output
   # so it will be displayed in the job page on Gitlab.
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
+
+deploy:
+  stage: deploy
+  before_script:
+  - apt-get update -qq
+  - apt-get install -qq git
+  # Setup SSH deploy keys
+  - 'which ssh-agent || ( apt-get install -qq openssh-client )'
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+  script:
+    - ssh umesh@139.59.46.113 "cd blogic && git checkout master && git pull origin master && exit"
+  only:
+    - master
