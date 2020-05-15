@@ -41,6 +41,6 @@ deploy:
   - ssh-add -l
 
   script:
-    - ssh umesh@139.59.46.113 "cd blogic && git checkout master && git pull origin master && exit"
+    - ssh umesh@139.59.46.113 "cd blogic && git checkout master && git pull origin master && python manage.py migrate && exit"
   only:
     - master
