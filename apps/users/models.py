@@ -71,3 +71,6 @@ class User(AbstractUser, BaseModel):
 
     def __str__(self):
         return f'{self.full_name} {self.phone_number}'
+
+    def is_manager(self):
+        return self.is_active and self.is_staff and self.is_superuser
