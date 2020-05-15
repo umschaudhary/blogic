@@ -12,3 +12,4 @@ django-debug-toolbar
 django-extensions
 Pillow==7.1.2
 psycopg2-binary==2.8.5
+coverage
