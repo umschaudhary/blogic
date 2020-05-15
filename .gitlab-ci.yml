@@ -10,8 +10,11 @@ services:
 variables:
   PROJECT_NAME: jobportal_backend
   POSTGRES_DB: ci
+  POSTGRES_USER: runner
+  POSTGRES_PASSWORD: ""
+  POSTGRES_HOST_AUTH_METHOD: trust
   GIT_DEPTH: 0
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"  
 
 cache:
   paths:

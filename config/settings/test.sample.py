@@ -6,7 +6,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ci',
-        'USER': 'postgres',
+        'USER': 'runner',
         'PASSWORD': '',
         'HOST': 'postgres',
         'PORT': '5432',
