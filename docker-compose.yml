@@ -1,0 +1,22 @@
+version: '3'
+volumes:
+  pgdata:
+services:
+  python:
+    build:
+      context: .
+      dockerfile: docker/python/Dockerfile
+    volumes:
+      - .:/blogic
+    ports:
+      - 8000:8000
+  postgres:
+    image: postgres:12.2
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: blogic
+      POSTGRES_DB: blogic
+      POSTGRES_PASS: blogic
+    volumes:
+      - pgdata:/var/lib/postgresql/data
