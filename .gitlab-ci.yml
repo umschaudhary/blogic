@@ -4,6 +4,19 @@ stages:
   - test
   - deploy
 
+services:
+  - postgres:latest
+
+variables:
+  PROJECT_NAME: jobportal_backend
+  POSTGRES_DB: ci
+  GIT_DEPTH: 0
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+  - .cache/pip
+
 test:
   stage: test
   script:
