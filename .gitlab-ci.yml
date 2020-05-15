@@ -27,8 +27,18 @@ deploy:
   - 'which ssh-agent || ( apt-get install -qq openssh-client )'
   - eval $(ssh-agent -s)
   - ssh-add <(echo "$SSH_PRIVATE_KEY")
-  - mkdir -p ~/.ssh
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  echo "ssh-add"
+  echo "$SSH_PRIVATE_KEY" > temp-key
+  chmod 600 temp-key
+  ssh-add temp-key
+  rm temp-key
+
+  echo "config"
+  mkdir -p ~/.ssh
+  echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+
+  echo "list keys (inside script)"
+  ssh-add -l
 
   script:
     - ssh umesh@139.59.46.113 "cd blogic && git checkout master && git pull origin master && exit"
