@@ -14,6 +14,7 @@ class UserSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = User
         fields = [
+            "id",
             "username",
             "phone_number",
             "password",
@@ -23,6 +24,12 @@ class UserSerializer(DynamicFieldsModelSerializer):
             "is_blocked",
             "profile_picture"
         ]
+
+    def get_fields(self):
+        fields = super().get_fields()
+        if self.request.method.lower() == 'get':
+            fields['password'] = serializers.HiddenField(default=None)
+        return fields
 
     def create(self, validated_data):
         password = validated_data.pop('password')
