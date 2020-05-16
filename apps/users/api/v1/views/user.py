@@ -53,6 +53,7 @@ class UserViewSet(CreateListRetrieveUpdateViewSet):
         detail=False,
         methods=['get', ],
         queryset=User.objects.all(),
+        permission_classes=[IsAuthenticated],
         url_path="me",
         url_name="me"
 
