@@ -47,3 +47,20 @@ class UserTest(APITestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data.get('full_name'), 'Ramesh')
+
+    def test_user_profile(self):
+        response = self.test_create_user()
+        phone_number = response.data.get('phone_number')
+        url = reverse("api_v1:users:users-me")
+
+        self.client.login(
+            phone_number=phone_number,
+            password='admin123'
+        )
+        response = self.client.get(path=url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_user_profile_without_login(self):
+        url = reverse("api_v1:users:users-me")
+        response = self.client.get(path=url)
+        self.assertEqual(response.status_code, 401)
