@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import action
 
 from apps.users.api.v1.serializers.user import UserSerializer
 from apps.api.v1.mixins.viewset import CreateListRetrieveUpdateViewSet
@@ -36,9 +37,26 @@ class UserViewSet(CreateListRetrieveUpdateViewSet):
     }
 
     def get_permissions(self):
+        """ Permission setup """
         try:
             # return permission_classes depending on `action`
             return [permission() for permission in self.permission_classes_by_action[self.action]]
         except KeyError:
             # action is not set return default permission_classes
             return [permission() for permission in self.permission_classes]
+
+    def get_object(self):
+        """ user detail """
+        return self.request.user
+
+    @action(
+        detail=False,
+        methods=['get', ],
+        queryset=User.objects.all(),
+        url_path="me",
+        url_name="me"
+
+    )
+    def me(self, request, *args, **kwargs):
+        """ User profile view """
+        return self.retrieve(request, *args, **kwargs)
