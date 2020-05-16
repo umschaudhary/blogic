@@ -123,6 +123,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10
 }
+REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {'otp': '10/day'}
 
 JWT_AUTH = {
     'JWT_ENCODE_HANDLER':
@@ -187,6 +188,20 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_URL = 'rest_framework:login'
 LOGOUT_URL = 'rest_framework:logout'
 
+# OTP Settings
+
+OTP_GENERATION_PER_DAY_LIMIT = 5
+# Time in seconds
+OTP_VERIFICATION_SECONDS = 60 * 5
+
+OTP_LENGTH = 5
+
+# Time in seconds
+ACCEPTABLE_TIME_FOR_PASSWORD_SET_AFTER_OTP_GENERATION = 60 * 10
+
+MAX_OTP_RETRY = 5
+
+ATTACHMENT_MAX_UPLOAD_SIZE = 2 * 1024 * 1024
 
 VERSIONS = {
     'android_version': '0.0.01',
@@ -196,3 +211,11 @@ VERSIONS = {
 }
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_SCHEME', 'https')
+
+OTP_SETTINGS = {
+    "OTP_GENERATION_PER_DAY_LIMIT": 5,
+    "OTP_VERIFICATION_SECONDS": 60 * 5,
+    "OTP_LENGTH": 5,
+    "ACCEPTABLE_TIME_FOR_PASSWORD_SET_AFTER_OTP_GENERATION": 60 * 10,
+    "MAX_OTP_RETRY": 5,
+}
