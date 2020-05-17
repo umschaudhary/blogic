@@ -23,3 +23,4 @@ INSTALLED_APPS += (
 MIDDLEWARE += (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
+SMS_TOKEN = None

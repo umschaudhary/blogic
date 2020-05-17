@@ -35,5 +35,6 @@ class UserSerializer(DynamicFieldsModelSerializer):
         password = validated_data.pop('password')
         instance = super().create(validated_data)
         instance.set_password(password)
+        instance.is_active = False
         instance.save()
         return instance

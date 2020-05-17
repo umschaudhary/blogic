@@ -13,3 +13,4 @@ DATABASES = {
         'CONN_MAX_AGE': 600,
     }
 }
+SMS_TOKEN = None

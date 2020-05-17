@@ -1,16 +1,18 @@
 import uuid
 
-from django.db import models
+from django.db import models, transaction
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext as _
 from django.utils import timezone
 
 from apps.commons.models.abstract_base import BaseModel
-from apps.commons.utils.helpers import get_upload_path
+from apps.commons.utils.helpers import get_upload_path, get_today
 from apps.commons.utils.validators import validate_otp
+from apps.commons.constants import SUCCESS, FAILED
 from apps.users.constants import GENDER_CHOICES
 from apps.users.manager import UserManager
+from apps.users.api.v1.utils.otp import send_otp
 
 # Create your models here.
 
@@ -77,6 +79,32 @@ class User(AbstractUser, BaseModel):
 
     def is_manager(self):
         return self.is_active and self.is_staff and self.is_superuser
+
+    def can_generate_otp(self):
+        if self.is_blocked:
+            return False, 'User Account is Blocked'
+
+        if self.otps.filter(created_at__date=get_today()).count() > settings.OTP_GENERATION_PER_DAY_LIMIT:
+            return False, 'Otp Generation Limit Crossed.'
+
+        return True, ''
+
+    def generate_otp(self):
+        status, otp = send_otp(self.phone_number)
+        if status == SUCCESS:
+            try:
+                with transaction.atomic():
+                    PhoneOtp.objects.create(
+                        user=self,
+                        otp=otp
+                    )
+            except Exception as e:
+                status = FAILED
+                otp = 'Phone Number with same otp generated.'
+        return status, otp
+
+    def is_valid_otp(self, otp, for_password_reset=False, update_try_count=False):
+        return PhoneOtp.is_valid_otp(self, otp, for_password_reset, update_try_count)
 
 
 class PhoneOtp(BaseModel):
@@ -150,7 +178,7 @@ class PhoneOtp(BaseModel):
 
         if not has_acceptable_time_limit:
             return False, _('OTP verification time reached.')
-        return True
+        return True, ''
 
     @classmethod
     def get_latest_phone_otp(cls, user_info):
