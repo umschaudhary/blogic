@@ -4,7 +4,10 @@ from rest_framework_jwt.views import (
     refresh_jwt_token,
     verify_jwt_token,
 )
-from apps.users.api.v1.views.auth import OTPGenerateView, OTPVerifyView
+from apps.users.api.v1.views.auth import (
+    OTPGenerateView,
+    OTPVerifyView,
+)
 
 app_name = 'auth'
 

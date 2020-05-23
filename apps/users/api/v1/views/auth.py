@@ -1,14 +1,14 @@
-from apps.commons.constants import SUCCESS
-from apps.api.v1.utils.otp_throttle import OTPRateThrottle
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import get_user_model
 from django.conf import settings
 
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView
 
 from apps.users.api.v1.serializers.auth import PhoneNumberSerializer, OTPVerificationSerializer
-
+from apps.commons.constants import SUCCESS
+from apps.api.v1.utils.otp_throttle import OTPRateThrottle
 
 USER = get_user_model()
 
