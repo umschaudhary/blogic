@@ -26,7 +26,6 @@ class UserViewSet(CreateListRetrieveUpdateViewSet):
     """
     list, create, update and retrieve viewset for Users
     """
-
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'username'
