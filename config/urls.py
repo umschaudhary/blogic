@@ -45,7 +45,7 @@ if settings.DEBUG:
         openapi.Info(
             title="Blogic Backend",
             default_version='v1',
-            description="Prefix: /api/v1/"
+            description="Example : /api/v1/users/"
         ),
         public=True,
         permission_classes=(permissions.AllowAny,),
