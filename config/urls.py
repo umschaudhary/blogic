@@ -33,6 +33,7 @@ urlpatterns = [
     path('api/versions/', app_version, name='version')
 ]
 
+
 if settings.DEBUG:
     import debug_toolbar
     from django.conf.urls.static import static
@@ -44,22 +45,20 @@ if settings.DEBUG:
         openapi.Info(
             title="Blogic Backend",
             default_version='v1',
-            description="Blogic API Service "
+            description="Prefix: /api/v1/"
         ),
         public=True,
         permission_classes=(permissions.AllowAny,),
+        urlconf='apps.api.v1.urls',
     )
 
     urlpatterns += [
-        re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0),
-                name='schema-json'),
         path('api/root/', schema_view.with_ui('swagger',
                                               cache_timeout=0), name='schema-swagger-ui'),
         path('redoc/', schema_view.with_ui('redoc',
                                            cache_timeout=0), name='schema-redoc'),
         path('', RedirectView.as_view(url='/api/root/', permanent=False)),
         path('__debug__/', include(debug_toolbar.urls)),
-        path('api/versions/', app_version, name='version')
     ] + static(
         settings.STATIC_URL, document_root=settings.STATIC_ROOT
     ) + static(
