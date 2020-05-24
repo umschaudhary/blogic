@@ -28,8 +28,8 @@ class PostViewSet(CreateListRetrieveUpdateViewSet):
         'deadline'
     )
     permission_classes_by_action = {
-        'create': [AllowAny],
-        'list': [ManagerPermission],
+        'create': [IsAuthenticated],
+        'list': [AllowAny],
         'update': [IsOwnerOrManager],
         'retrieve': [IsAuthenticated],
         'partial_update': [IsOwnerOrManager]
