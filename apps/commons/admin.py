@@ -1,4 +1,7 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
 from apps.commons.models.common import Category
 
-admin.site.register(Category)
+
+@register(Category)
+class CategoryAdmin(ModelAdmin):
+    list_display = ('name', )
