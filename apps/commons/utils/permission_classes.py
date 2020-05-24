@@ -30,7 +30,9 @@ class IsOwnerOrManager(BasePermission):
             return True
 
         # Instance must have an attribute named `owner`.
-        return (obj.username == request.user.username or request.user.is_manager())
+        if hasattr(obj, 'username'):
+            return (obj.username == request.user.username or request.user.is_manager())
+        return (obj.author == request.user or request.user.is_manager())
 
 
 class ManagerPermission(BasePermission):
