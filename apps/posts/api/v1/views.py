@@ -31,7 +31,7 @@ class PostViewSet(CreateListRetrieveUpdateViewSet):
         'create': [IsAuthenticated],
         'list': [AllowAny],
         'update': [IsOwnerOrManager],
-        'retrieve': [IsAuthenticated],
+        'retrieve': [AllowAny],
         'partial_update': [IsOwnerOrManager]
     }
 
