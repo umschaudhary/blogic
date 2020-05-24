@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from apps.commons.models.abstract_base import BaseModel, SlugModel
 from apps.commons.models.common import Category
-from apps.commons.utils.validators import is_future_datetime
 from apps.commons.utils.helpers import get_upload_path
 from apps.posts.constants import (
     STATUS_CHOICES,
