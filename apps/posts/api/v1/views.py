@@ -18,7 +18,6 @@ class PostViewSet(CreateListRetrieveUpdateViewSet):
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    lookup_field = 'slug'
     filter_backends = (SearchFilter, DjangoFilterBackend, OrderingFilter)
     filter_fields = ('category', )
     search_fields = ['title', 'author__full_name', ]
