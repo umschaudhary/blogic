@@ -26,7 +26,7 @@ class Post(BaseModel):
         null=True,
         blank=True
     )
-    body = models.TextField(null=True)
+    body = models.TextField(null=True, blank=True)
     deadline = models.DateTimeField(null=True)
     status = models.CharField(
         choices=STATUS_CHOICES, default=PUBLISHED, max_length=50,

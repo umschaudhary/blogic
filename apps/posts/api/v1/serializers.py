@@ -15,6 +15,13 @@ class PostSerializer(DynamicFieldsModelSerializer):
         model = Post
         fields = "__all__"
 
+    def validate(self, attrs):
+        attachment = attrs.get('attachment')
+        body = attrs.get('body')
+        if not attachment and not body:
+            raise serializers.ValidationError("Attachment Or Body Required.")
+        return attrs
+
     def get_fields(self):
         fields = super().get_fields()
         if self.request and self.request.method.lower() == 'get':
@@ -28,3 +35,4 @@ class PostSerializer(DynamicFieldsModelSerializer):
 
     def get_total_comments(self, obj):
         return obj.comments.filter(active=True).count()
+
