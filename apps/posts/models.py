@@ -14,10 +14,7 @@ from apps.posts.constants import (
 User = get_user_model()
 
 
-class Post(SlugModel, BaseModel):
-    title = models.CharField(
-        max_length=255, db_index=True, unique=True
-    )
+class Post(BaseModel):
     scheduled_for = models.DateTimeField(null=True)
     category = models.ForeignKey(
         Category, related_name='posts',
@@ -47,11 +44,6 @@ class Post(SlugModel, BaseModel):
 
     class Meta:
         ordering = ('created_at', )
-        constraints = [
-            models.UniqueConstraint(
-                fields=['title', 'author'],
-                name='unique_title_with_author')
-        ]
 
     def __str__(self):
         return f"{self.title} by {self.author}"
@@ -69,3 +61,17 @@ class PostLike(BaseModel):
 
     class Meta:
         unique_together = ('user', 'post')
+
+
+class Comment(BaseModel):
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    body = models.TextField()
+    active = models.BooleanField(default=True)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('created_at',)
+
+    def __str__(self):
+        return 'Comment by {}'.format(self.user.full_name)
