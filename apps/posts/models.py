@@ -46,7 +46,7 @@ class Post(BaseModel):
         ordering = ('created_at', )
 
     def __str__(self):
-        return f"{self.title} by {self.author}"
+        return f"post by {self.author}"
 
 
 class PostLike(BaseModel):

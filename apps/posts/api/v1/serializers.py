@@ -8,6 +8,8 @@ class PostSerializer(DynamicFieldsModelSerializer):
     author = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
+    total_likes = serializers.SerializerMethodField()
+    total_comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -20,3 +22,9 @@ class PostSerializer(DynamicFieldsModelSerializer):
                 fields=['id', 'name']
             )
         return fields
+
+    def get_total_likes(self, obj):
+        return obj.likes.count()
+
+    def get_total_comments(self, obj):
+        return obj.comments.filter(active=True).count()
