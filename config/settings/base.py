@@ -43,14 +43,15 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'adminlte3',
+    'adminlte3_theme',
+    'django.contrib.admin'
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
-    "material.admin",
-    'material.admin.default',
 ]
 
 LOCAL_APPS = [
