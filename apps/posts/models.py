@@ -65,8 +65,11 @@ class PostLike(BaseModel):
 
 class Comment(BaseModel):
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
-    body = models.TextField()
-    active = models.BooleanField(default=True)
+    content = models.TextField(blank=True, max_length=1000)
+    image = models.ImageField(
+        upload_to=get_upload_path, blank=True, null=True,
+    )
+    is_active = models.BooleanField(default=True)
     parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.SET_NULL)
     user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
 
@@ -74,4 +77,4 @@ class Comment(BaseModel):
         ordering = ('created_at',)
 
     def __str__(self):
-        return 'Comment by {}'.format(self.user.full_name)
+        return 'Comment by {}'.format(self.user)

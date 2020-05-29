@@ -6,16 +6,16 @@ from rest_framework.decorators import action
 
 from apps.api.v1.mixins.viewset import CreateListRetrieveUpdateViewSet
 from apps.api.v1.mixins.serializer import DummySerializer
-from apps.posts.models import Post
-from apps.posts.models import PostLike
-from apps.posts.api.v1.serializers import PostSerializer
+from apps.posts.models import Post, PostLike, Comment
+from apps.posts.api.v1.serializers import PostSerializer, CommentSerializer
 from apps.commons.utils.permission_classes import (
     ManagerPermission,
     IsOwnerOrManager,
 )
+from apps.commons.utils.permission_mixins import CommonActionPermissionMixin
 
 
-class PostViewSet(CreateListRetrieveUpdateViewSet):
+class PostViewSet(CommonActionPermissionMixin, CreateListRetrieveUpdateViewSet):
     """
     list, create, update and retrieve viewset for  Posts
     """
@@ -30,22 +30,7 @@ class PostViewSet(CreateListRetrieveUpdateViewSet):
         'modified_at',
         'deadline'
     )
-    permission_classes_by_action = {
-        'create': [IsAuthenticated],
-        'list': [AllowAny],
-        'update': [IsOwnerOrManager],
-        'retrieve': [AllowAny],
-        'partial_update': [IsOwnerOrManager]
-    }
 
-    def get_permissions(self):
-        """ Permission setup """
-        try:
-            # return permission_classes depending on `action`
-            return [permission() for permission in self.permission_classes_by_action[self.action]]
-        except KeyError:
-            # action is not set return default permission_classes
-            return [permission() for permission in self.permission_classes]
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -72,3 +57,30 @@ class PostViewSet(CreateListRetrieveUpdateViewSet):
                 post_like.liked = True
             post_like.save()
         return Response({'liked': post_like.liked})
+
+
+    @action(methods=['GET'], detail=True,
+            url_name='comments',
+            url_path='comments',
+            serializer_class=CommentSerializer
+            )
+    def comments(self, request, *args, **kwargs):
+        post = self.get_object()
+        comments = Comment.objects.filter(post=post, parent_id=None)
+
+        page = self.paginate_queryset(comments)
+        if page is not None:
+           serializer = self.serializer_class(page, many=True)
+           return self.get_paginated_response(serializer.data)
+
+        serializer = self.serializer_class(comments, many=True)
+        return Response(serializer.data)
+
+    #  @comments.mapping.post
+    #  def create_comments(self, request, *args, **kwargs):
+    #      post = self.get_object()
+    #      serializer = self.serializer_class(data=request.data)
+    #      serializer.is_valid(raise_exception=True)
+    #      data = serializer.data
+    #      instance = Comment.objects.create(**data, post=post, user=request.user)
+    #      return Response(data)

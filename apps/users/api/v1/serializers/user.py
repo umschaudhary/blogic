@@ -32,8 +32,9 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
     def get_fields(self):
         fields = super().get_fields()
-        if self.request.method.lower() == 'get':
+        if self.request and self.request.method.lower() == 'get':
             fields['password'] = serializers.HiddenField(default=None)
+            fields['profile_picture'] = serializers.SerializerMethodField()
         return fields
 
     def create(self, validated_data):
@@ -43,6 +44,11 @@ class UserSerializer(DynamicFieldsModelSerializer):
         instance.is_active = False
         instance.save()
         return instance
+
+    def get_profile_picture(self, obj):
+        logo_path = obj.profile_picture.url if obj.profile_picture else \
+            '/static/defaults/avatar.jpeg'
+        return self.request.build_absolute_uri(logo_path)
 
 
 class PasswordChangeSerializer(DummySerializer):
