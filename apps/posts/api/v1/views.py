@@ -8,6 +8,7 @@ from apps.api.v1.mixins.viewset import CreateListRetrieveUpdateViewSet
 from apps.api.v1.mixins.serializer import DummySerializer
 from apps.posts.models import Post, PostLike, Comment
 from apps.posts.api.v1.serializers import PostSerializer, CommentSerializer
+from apps.posts.api.v1.serializers import CommentPostSerializer
 from apps.commons.utils.permission_classes import (
     ManagerPermission,
     IsOwnerOrManager,
@@ -76,11 +77,12 @@ class PostViewSet(CommonActionPermissionMixin, CreateListRetrieveUpdateViewSet):
         serializer = self.serializer_class(comments, many=True)
         return Response(serializer.data)
 
-    #  @comments.mapping.post
-    #  def create_comments(self, request, *args, **kwargs):
-    #      post = self.get_object()
-    #      serializer = self.serializer_class(data=request.data)
-    #      serializer.is_valid(raise_exception=True)
-    #      data = serializer.data
-    #      instance = Comment.objects.create(**data, post=post, user=request.user)
-    #      return Response(data)
+
+class CommentViewSet(CommonActionPermissionMixin, CreateListRetrieveUpdateViewSet):
+    """
+    list, create, update and retrieve viewset for Comments 
+    """
+    queryset = Comment.objects.all()
+    serializer_class = CommentPostSerializer 
+    filter_backends = (SearchFilter, DjangoFilterBackend, OrderingFilter)
+    filter_fields = ["post", "user"]

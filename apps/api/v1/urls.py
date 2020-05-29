@@ -7,6 +7,7 @@ app_name = "api_v1"
 urlpatterns = [
     path('auth/', include('apps.users.api.v1.urls.auth')),
     path('users/', include('apps.users.api.v1.urls.user')),
-    path('posts/', include('apps.posts.api.v1.urls')),
+    path('posts/', include('apps.posts.api.v1.urls.posts')),
+    path('comments/', include('apps.posts.api.v1.urls.comments')),
     path('commons/', include('apps.commons.api.v1.urls')),
 ]

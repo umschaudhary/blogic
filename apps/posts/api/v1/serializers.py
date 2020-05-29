@@ -11,6 +11,20 @@ class RecursiveField(serializers.Serializer):
             context=self.context)
         return serializer.data
 
+class CommentPostSerializer(DynamicFieldsModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(), 
+    )
+    class Meta:
+        model = Comment
+        fields = ["id", "user", "content", "image", "post"]
+
+    def validate(self, attrs):
+        content = attrs.get('content')
+        image = attrs.get('image')
+        if not content and not image:
+            raise serializers.ValidationError("Image Or Comment content Required.")
+        return attrs
 
 class CommentSerializer(DynamicFieldsModelSerializer):
     replies = RecursiveField(many=True, read_only=True)
@@ -19,21 +33,6 @@ class CommentSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Comment
         fields = ["id", "content", "image", "user", "replies"]
-
-    def get_fields(self):
-        fields = super().get_fields()
-        if self.request and self.request.method.lower() == 'post':
-            fields['user'] = serializers.HiddenField(
-                default=serializers.CurrentUserDefault(), 
-            )
-        return fields
-
-    def validate(self, attrs):
-        content = attrs.get('content')
-        image = attrs.get('image')
-        if not content and not image:
-            raise serializers.ValidationError("Image Or Comment content Required.")
-        return attrs
 
 
 class PostSerializer(DynamicFieldsModelSerializer):
