@@ -47,7 +47,7 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
     def get_profile_picture(self, obj):
         logo_path = obj.profile_picture.url if obj.profile_picture else \
-            '/static/defaults/avatar.jpeg'
+            '/media/uploads/post/avatar.jpg'
         return self.request.build_absolute_uri(logo_path)
 
 
