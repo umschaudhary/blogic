@@ -20,7 +20,7 @@ class PostViewSet(CommonActionPermissionMixin, CreateListRetrieveUpdateViewSet):
     """
     list, create, update and retrieve viewset for  Posts
     """
-    queryset = Post.objects.all()
+    queryset = Post.objects.order_by("-modified_at")
     serializer_class = PostSerializer
     filter_backends = (SearchFilter, DjangoFilterBackend, OrderingFilter)
     filter_fields = ('category', )
