@@ -56,7 +56,9 @@ class PostViewSet(CommonActionPermissionMixin, CreateListRetrieveUpdateViewSet):
                 post_like.liked = False
             else:
                 post_like.liked = True
-            post_like.save()
+        else:
+            post_like.liked = True
+        post_like.save()
         return Response({'liked': post_like.liked})
 
 
