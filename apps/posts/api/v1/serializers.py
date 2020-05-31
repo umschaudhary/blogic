@@ -36,8 +36,6 @@ class CommentSerializer(DynamicFieldsModelSerializer):
 
 
 class PostSerializer(DynamicFieldsModelSerializer):
-    total_likes = serializers.SerializerMethodField()
-    total_comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -65,8 +63,3 @@ class PostSerializer(DynamicFieldsModelSerializer):
             )
         return fields
 
-    def get_total_likes(self, obj):
-        return obj.likes.filter(liked=True).count()
-
-    def get_total_comments(self, obj):
-        return obj.comments.filter(is_active=True).count()

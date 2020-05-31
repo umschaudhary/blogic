@@ -54,10 +54,15 @@ class PostViewSet(CommonActionPermissionMixin, CreateListRetrieveUpdateViewSet):
         if not created:
             if post_like.liked:
                 post_like.liked = False
+                if post.total_likes > 0:
+                    post.total_likes -= 1
             else:
                 post_like.liked = True
+                post.total_likes += 1
         else:
             post_like.liked = True
+            post.total_likes += 1
+        post.save()
         post_like.save()
         return Response({'liked': post_like.liked})
 

@@ -50,6 +50,7 @@ if settings.DEBUG:
         public=True,
         permission_classes=(permissions.AllowAny,),
         urlconf='apps.api.v1.urls',
+        url="https://127.0.0.1:8000/api/v1/"
     )
 
     urlpatterns += [

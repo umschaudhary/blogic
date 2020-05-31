@@ -41,6 +41,8 @@ class Post(BaseModel):
         User, on_delete=models.CASCADE,
         related_name='posts'
     )
+    total_likes = models.PositiveIntegerField(default=0)
+    total_comments = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ('created_at', )
